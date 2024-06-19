@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Add photos to immich album with shortcut
+// @name         Add to immich album shortcut
 // @namespace    http://tampermonkey.net/
 // @version      0.2
 // @description  Add photos to immich album with shortcut
