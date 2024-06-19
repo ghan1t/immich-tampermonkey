@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Add to immich album shortcut
+// @name         Add photos to immich album with shortcut
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Add photos to immich albums with shortcuts
+// @version      0.2
+// @description  Add photos to immich album with shortcut
 // @author       https://github.com/ghan1t
 // @match        http://immich-url:2283/photos*
 // @updateURL    https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
@@ -44,7 +44,7 @@ function sleep(ms) {
 function selectAlbumByName() {
     if (albumListParent && albumListParent.length) {
         const albums = albumListParent.find('button').slice(1);
-        const matchedIndex = albums.index(albums.filter(function() {
+        const matchedIndex = albums.index(albums.filter(function () {
             return $(this).find('span span.w-full').text().trim() === lastSelectedAlbumName;
         }));
 
@@ -60,7 +60,7 @@ async function resetAlbumSelection() {
     await sleep(200);
     selectAlbumByName();
 }
-(function() {
+(function () {
     'use strict';
 
     // Mutation observer to watch for various changes based on state
@@ -100,8 +100,8 @@ async function resetAlbumSelection() {
         subtree: true
     });
 
-    // Keyboard navigation for album list
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
+        // Keyboard navigation for album list
         if (currentState === State.FILTERING_ALBUMS) {
             const albums = albumListParent.find('button').slice(1);
             if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -110,20 +110,15 @@ async function resetAlbumSelection() {
             } else if (e.key === 'Enter' && albums.length > 0) {
                 const selectedAlbum = albums.eq(currentAlbumIndex);
                 lastSelectedAlbumName = selectedAlbum.find('span span.w-full').text().trim();
-                console.log("last album", lastSelectedAlbumName);
                 localStorage.setItem('lastSelectedAlbumName', lastSelectedAlbumName); // Save to localStorage
                 selectedAlbum.click();
                 currentState = State.IDLE; // Reset state after selection
-                console.log("state: " + currentState);
+                console.log("state: " + currentState + " saved Album name: " + lastSelectedAlbumName);
             } else {
                 resetAlbumSelection();
             }
         }
-    }, true);
-
-    // Attach keypress listener for initial action
-    //$(document).on('keydown', function(e) {
-    document.addEventListener('keydown', function(e) {
+        // Initial Shortcut
         if (currentState === State.IDLE /*&& e.shiftKey*/ && e.key === shortcut) {
             var plusButton = $('button[title="Add to..."], button[title="More"]');
             if (plusButton.length) {
@@ -134,4 +129,5 @@ async function resetAlbumSelection() {
             }
         }
     }, true);
+
 })();
