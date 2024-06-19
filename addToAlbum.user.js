@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         Add to immich album shortcut
+// @name         Add photos to immich album with shortcut       
 // @namespace    http://tampermonkey.net/
 // @version      0.2
 // @description  Add photos to immich album with shortcut
 // @author       https://github.com/ghan1t
-// @match        http://immich-url:2283/photos*
+// @match        http://immich-url:2283/*
 // @updateURL    https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
 // @downloadURL  https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
 // @grant        GM_setValue
