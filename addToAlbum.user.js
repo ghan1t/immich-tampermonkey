@@ -6,7 +6,7 @@
 // @author       https://github.com/ghan1t
 // @match        http://immich-url:2283/photos*
 // @updateURL    https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
-// @downloadURL  https://github.com/ghan1t/immich-tampermonkey/blob/main/addToAlbum.user.js
+// @downloadURL  https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
