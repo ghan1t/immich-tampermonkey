@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         Interactive Click and Navigate in Album
+// @name         Add to immich album shortcut
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  Immich add to album with shortcuts
+// @description  Add photos to immich albums with shortcuts
 // @author       https://github.com/ghan1t
-// @match        http://192.168.1.100:2283/photos*
+// @match        http://immich-url:2283/photos*
+// @updateURL    https://github.com/ghan1t/immich-tampermonkey/raw/main/addToAlbum.user.js
+// @downloadURL  https://github.com/ghan1t/immich-tampermonkey/blob/main/addToAlbum.user.js
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
