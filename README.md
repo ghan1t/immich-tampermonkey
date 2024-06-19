@@ -24,3 +24,9 @@ This repository contains [Tampermonkey](https://www.tampermonkey.net/) scripts f
 * Use arrow up/down to select the correct album.
 * Press enter to add the photo(s) to the album.
 * The next time you add to an album, the previous album will be pre-selected and you can just press enter.
+
+### Updating
+
+* Tampermonkey checks daily for updates and shows a popup if an update is available.
+* Because you changed the url of immich, the update is manual and it will overwrite the url.
+* After the update you need to modify "@match" again to match your immich instance.
