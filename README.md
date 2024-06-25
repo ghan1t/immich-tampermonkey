@@ -9,13 +9,29 @@ This repository contains [Tampermonkey](https://www.tampermonkey.net/) scripts f
 
 ## Add Photos to Album with a Shortcut
 
+### Configuration
+
+* Set the URL of your immich instance in the @match tag
+* Set the shortcuts in the array. Value null opens the "Add to album" popup, an album name directly adds the photo to an album.
+
+```javascript
+const albumShortcuts = {
+    'I': null, // Default Shortcut
+    'N': 'Album 1', // Directly add photo to Album 1
+    'B': 'Album 2' // Directly add photo to Album 2
+};
+```
+
+### Usage
+
 * Select one or multiple photos or open one photo.
 * Press your shortcut.
 * Enter the name of your album.
 * Use arrow up/down to select the correct album.
 * Press enter to add the photo(s) to the album.
-* The next time you add to an album, the previous album will be pre-selected and you can just 
+* The next time you add to an album, the previous album will be pre-selected and you can just
 press enter.
+* Press the shortcut for an Album to directly add a photo.
 
 ## Select Multiple Photos with Shift + Click
 

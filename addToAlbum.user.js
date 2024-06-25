@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Add photos to immich album with shortcut       
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Add photos to immich album with shortcut
 // @author       https://github.com/ghan1t
 // @match        http://immich-url:2283/*
@@ -12,7 +12,12 @@
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
 // ==/UserScript==
 
-const shortcut = "I";
+// HashMap of shortcut characters to album names
+const albumShortcuts = {
+    'I': null, // Default Shortcut
+    'N': 'Album 1',
+    'B': 'Album 2'
+};
 
 const State = {
     IDLE: "IDLE",
@@ -24,7 +29,8 @@ const State = {
 let currentState = State.IDLE;
 let currentAlbumIndex = 0;
 let albumListParent;
-let lastSelectedAlbumName; // Store the last selected album name
+let lastSelectedAlbumName = localStorage.getItem('lastSelectedAlbumName') || ''; // Store the last selected album name
+let directSelectAlbumName = null;
 
 // Helper function to update selection
 function updateAlbumSelection(index) {
@@ -34,6 +40,11 @@ function updateAlbumSelection(index) {
     const currentAlbum = albums.eq(currentAlbumIndex);
     currentAlbum.addClass('border-2');
     currentAlbum[0].scrollIntoView({ behavior: 'instant', block: 'nearest' });
+    if (directSelectAlbumName != null) {
+        console.log('Directly adding to Album: ' + directSelectAlbumName);
+        directSelectAlbumName = null;
+        currentAlbum.click();
+    }
 }
 
 function sleep(ms) {
@@ -45,7 +56,11 @@ function selectAlbumByName() {
     if (albumListParent && albumListParent.length) {
         const albums = albumListParent.find('button').slice(1);
         const matchedIndex = albums.index(albums.filter(function () {
+            if (directSelectAlbumName != null) {
+                return $(this).find('span span.w-full').text().trim() === directSelectAlbumName;
+            } else {
             return $(this).find('span span.w-full').text().trim() === lastSelectedAlbumName;
+            }
         }));
 
         if (matchedIndex >= 0) {
@@ -79,7 +94,6 @@ async function resetAlbumSelection() {
                     albumListParent = $('p:contains("ALBUMS")').parent();
                     currentState = State.FILTERING_ALBUMS;
                     console.log("state: " + currentState);
-                    lastSelectedAlbumName = localStorage.getItem('lastSelectedAlbumName') || '';
                     resetAlbumSelection();
                 }
                 break;
@@ -87,6 +101,7 @@ async function resetAlbumSelection() {
                 if ($('p:contains("ALBUMS")').length === 0) {
                     currentState = State.IDLE;
                     albumListParent = null;
+                    directSelectAlbumName = null;
                     console.log("state: " + currentState);
                 }
                 break;
@@ -119,13 +134,23 @@ async function resetAlbumSelection() {
             }
         }
         // Initial Shortcut
-        if (currentState === State.IDLE /*&& e.shiftKey*/ && e.key === shortcut) {
+        if (currentState === State.IDLE) {
+            // Fetch the album name associated with the pressed key
+            const targetAlbumName = albumShortcuts[e.key];
+            if (targetAlbumName !== undefined) {
+                console.log("pressed shortcut", targetAlbumName);
+                if (targetAlbumName !== null) {
+                    directSelectAlbumName = targetAlbumName;
+                } else {
+                    directSelectAlbumName = null;
+                }
             var plusButton = $('button[title="Add to..."], button[title="More"]');
             if (plusButton.length) {
                 console.log('Add to album button found, clicking it...');
                 currentState = State.WAITING_FOR_ADD_TO_ALBUM;
                 console.log("state: " + currentState);
                 plusButton.click();
+                }
             }
         }
     }, true);
